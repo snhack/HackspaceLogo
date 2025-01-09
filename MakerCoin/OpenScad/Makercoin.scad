@@ -9,10 +9,15 @@ include <qr.scad>
 
 //render each colour segment at a time
 // i.e only 1 colour = true at once
-show_black = true;
+show_black = false;
 show_yellow = false;
-show_orange = false;
+show_orange = true;
 show_white = false;
+
+//hollow (affects white layer only)
+hollow_for_rfid = false;
+//keyring hole (affects white and orange layer)
+keyring_hole = true;
 
 
 radius = coin_d/2;
@@ -78,16 +83,26 @@ if (show_black){
 
 if (show_orange){
     color("orange"){
+        difference(){
         //outer dips
-        for (i=[0:5]){
-            rotate([0,0,i*60])
-            linear_extrude(coin_h) arc(radius-width, angles, width, fn);
+        union(){
+            for (i=[0:5]){
+                rotate([0,0,i*60])
+                linear_extrude(coin_h) arc(radius-width, angles, width, fn);
+            }
+            for (i=[0:11]){
+                rotate([0,0,i*30])
+                linear_extrude(coin_h) arc(radius-2.5-width, [-8,8], width-1, fn);
+            }        
+            SM_M();
         }
-        for (i=[0:11]){
-            rotate([0,0,i*30])
-            linear_extrude(coin_h) arc(radius-2.5-width, [-8,8], width-1, fn);
-        }        
-        SM_M();
+        //keyring hole
+        if (keyring_hole){
+            rotate([0,0,30])
+            translate([17,0,0])
+                cylinder(d=3, h=3);
+        } 
+    }        
     }
 }
 
@@ -110,10 +125,21 @@ if (show_white){
             rotate([0,0,i*30])
             linear_extrude(coin_h) arc(radius-2.5-width, [-8,8], width-1, fn);
         }        
-        SM_M();   
         qr_code();
         SM_M();
         SM_S();
+        
+        //hollow for rfid tag
+        if (hollow_for_rfid){
+            translate([0,0,1])
+                cylinder(d=26, h=1);
+        }
+        //keyring hole
+        if (keyring_hole){
+            rotate([0,0,30])
+            translate([17,0,0])
+                cylinder(d=3, h=3);
+        }   
         
     }
 }
