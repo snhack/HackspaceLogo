@@ -11,11 +11,11 @@ include <qr.scad>
 // i.e only 1 colour = true at once
 show_black = false;
 show_yellow = false;
-show_orange = true;
-show_white = false;
+show_orange = false;
+show_white = true;
 
 //hollow (affects white layer only)
-hollow_for_rfid = false;
+hollow_for_rfid = true;
 //keyring hole (affects white and orange layer)
 keyring_hole = true;
 
@@ -98,7 +98,7 @@ if (show_orange){
         }
         //keyring hole
         if (keyring_hole){
-            rotate([0,0,30])
+            rotate([0,0,90])
             translate([17,0,0])
                 cylinder(d=3, h=3);
         } 
@@ -136,7 +136,7 @@ if (show_white){
         }
         //keyring hole
         if (keyring_hole){
-            rotate([0,0,30])
+            rotate([0,0,90])
             translate([17,0,0])
                 cylinder(d=3, h=3);
         }   
